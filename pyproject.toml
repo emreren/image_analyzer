@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "image-analyzer"
+version = "0.1.0"
+description = "Image Analyzer"
+authors = ["emreren <emreren@hotmail.com>"]
+readme = "README.md"
+packages = [{include = "image_analyzer"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = {extras = ["all"], version = "^0.101.1"}
+python-multipart = "^0.0.6"
+pillow = "^10.0.0"
+pytesseract = "^0.3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
