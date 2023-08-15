@@ -34,8 +34,3 @@ async def analyze_image(file: UploadFile):
         "status": "successful",
         "findings": findings
     }
-
-# TODO: TEL NUMBER REGEX FİX
-# TODO: Unique findings every module
-# TODO: docker
-# TODO: redis (cache)

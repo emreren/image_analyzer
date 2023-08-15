@@ -16,12 +16,16 @@ async def find_cc_number(text: str) -> list[dict[str, str] | None]:
         matches = [match.replace("-", "").replace(" ", "") for match in matches]
         found_credit_cards.extend(matches)
 
+    unique_credit_cards = set()
+    for number in found_credit_cards:
+        unique_credit_cards.add(number)
+
     values = [
         {
             "value": number,
             "type": DataTypes.CREDIT_CARD_NUMBER.value,
         }
-        for number in found_credit_cards
+        for number in unique_credit_cards
         if await is_valid_cc(number)
     ]
 
