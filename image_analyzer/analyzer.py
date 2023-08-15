@@ -1,6 +1,8 @@
 from io import BytesIO
 from image_analyzer.utils.phone_number import find_phone_number
 from image_analyzer.utils.id_number import find_id_number
+from image_analyzer.utils.credit_card_number import find_cc_number
+from image_analyzer.utils.plate import find_plate
 from PIL import Image
 import pytesseract
 
@@ -17,4 +19,7 @@ async def find_sensitive_data(text: str) -> list[dict[str, str] | None]:
     findings = []
     findings.extend(await find_phone_number(text))
     findings.extend(await find_id_number(text))
+    findings.extend(await find_cc_number(text))
+    findings.extend(await find_plate(text))
+
     return findings
