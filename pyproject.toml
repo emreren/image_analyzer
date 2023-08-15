@@ -12,6 +12,8 @@ fastapi = {extras = ["all"], version = "^0.101.1"}
 python-multipart = "^0.0.6"
 pillow = "^10.0.0"
 pytesseract = "^0.3.10"
+dateparser = "^1.1.8"
+validators = "^0.21.2"
 
 
 [build-system]
