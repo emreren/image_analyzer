@@ -1,10 +1,12 @@
+
 import re
 import validators
 from image_analyzer.enums import DataTypes
+from config import settings
 
 
 async def find_domain(text: str) -> list[dict[str, str] | None]:
-    domain_pattern = re.compile(r'\b(?:https?://)?(?:www\.)?([A-Za-z0-9.-]+)\b')
+    domain_pattern = re.compile(settings.REGEX_PATTERNS.domain)
     unique_domains = set()
     for number in domain_pattern.findall(text):
         unique_domains.add(number)

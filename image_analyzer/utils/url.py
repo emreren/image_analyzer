@@ -1,10 +1,12 @@
+
 import re
 import validators
 from image_analyzer.enums import DataTypes
+from config import settings
 
 
 async def find_url(text: str) -> list[dict[str, str] | None]:
-    url_pattern = re.compile(r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))")
+    url_pattern = re.compile(settings.REGEX_PATTERNS.url)
     urls = [tuple(j for j in i if j)[-1] for i in url_pattern.findall(text)]
     unique_urls = set()
     for number in urls:

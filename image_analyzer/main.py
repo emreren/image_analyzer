@@ -2,13 +2,13 @@ import redis.asyncio as redis
 from fastapi import FastAPI, UploadFile, Request, status, HTTPException
 from fastapi.responses import JSONResponse
 from image_analyzer.analyzer import read_content, find_sensitive_data, get_hash_of_file
-from custom_expections import WrongFileFormatException
+from image_analyzer.custom_expections import WrongFileFormatException
+from config import settings
 import json
 
 
 app = FastAPI()
 redis_client = redis.Redis(host="redis", port=6379, db=0)
-IMAGE_TYPES = {"image/jpeg", "image/apng", "image/avif", "image/gif", "image/png", "image/svg", "image/xml", "image/webp"}
 
 
 @app.exception_handler(WrongFileFormatException)
@@ -22,7 +22,7 @@ async def unicorn_exception_handler(_request: Request, _exc: WrongFileFormatExce
 @app.post("/analyze/")
 async def analyze_image(file: UploadFile):
     # Check if the uploaded file is an image
-    if file.content_type not in IMAGE_TYPES:
+    if file.content_type not in settings.IMAGE_TYPES.image_types:
         raise WrongFileFormatException(file.filename)
 
     # Read the content and calculate the hash of the file
@@ -53,5 +53,3 @@ async def analyze_image(file: UploadFile):
     # Cache the result in Redis
     await redis_client.set(image_hash, json.dumps(result))
     return result
-
-# TODO: config file creation

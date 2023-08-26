@@ -1,9 +1,11 @@
+
 import re
 from image_analyzer.enums import DataTypes
+from config import settings
 
 
 async def find_plate(text: str) -> list[dict[str, str] | None]:
-    plate_pattern = re.compile(r'\b\d{2}\s?[A-Z]{1,3}\s?\d{2,4}\b')
+    plate_pattern = re.compile(settings.REGEX_PATTERNS.plate)
     unique_plates = set()
     for number in plate_pattern.findall(text):
         unique_plates.add(number.replace(" ", ""))

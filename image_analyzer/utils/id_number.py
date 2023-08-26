@@ -1,9 +1,11 @@
+
 import re
 from image_analyzer.enums import DataTypes
+from config import settings
 
 
 async def find_id_number(text: str) -> list[dict[str, str] | None]:
-    id_number_pattern = re.compile(r'\b\d{11}\b')
+    id_number_pattern = re.compile(settings.REGEX_PATTERNS.id_number)
     unique_id_numbers = set()
     for number in id_number_pattern.findall(text):
         unique_id_numbers.add(number)

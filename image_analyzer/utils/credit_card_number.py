@@ -1,11 +1,13 @@
+
 import re
 from image_analyzer.enums import DataTypes
+from config import settings
 
 
 async def find_cc_number(text: str) -> list[dict[str, str] | None]:
-    cc_pattern_1 = re.compile(r"\b(?:\d{4}-){3}\d{4}\b")
-    cc_pattern_2 = re.compile(r"\b(?:\d{4}\s){3}\d{4}\b")
-    cc_pattern_3 = re.compile(r"\b\d{16}\b")
+    cc_pattern_1 = re.compile(settings.REGEX_PATTERNS.credit_card_1)
+    cc_pattern_2 = re.compile(settings.REGEX_PATTERNS.credit_card_2)
+    cc_pattern_3 = re.compile(settings.REGEX_PATTERNS.credit_card_3)
 
     patterns = [cc_pattern_1, cc_pattern_2, cc_pattern_3]
 

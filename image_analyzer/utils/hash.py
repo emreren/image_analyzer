@@ -1,10 +1,12 @@
+
 import re
 import validators
 from image_analyzer.enums import DataTypes
+from config import settings
 
 
 async def find_hash(text: str) -> list[dict[str, str] | None]:
-    hash_pattern = re.compile(r'\b[A-Fa-f0-9]{32}\b|\b[A-Fa-f0-9]{40}\b|\b[A-Fa-f0-9]{64}\b')
+    hash_pattern = re.compile(settings.REGEX_PATTERNS.hash)
     unique_hashes = set()
     for number in hash_pattern.findall(text):
         unique_hashes.add(number)

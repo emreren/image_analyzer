@@ -1,10 +1,12 @@
+
 import re
 import validators
 from image_analyzer.enums import DataTypes
+from config import settings
 
 
 async def find_email(text: str) -> list[dict[str, str] | None]:
-    email_pattern = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
+    email_pattern = re.compile(settings.REGEX_PATTERNS.email)
     unique_emails = set()
     for number in email_pattern.findall(text):
         unique_emails.add(number)
