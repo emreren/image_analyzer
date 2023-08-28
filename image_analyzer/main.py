@@ -10,7 +10,7 @@ import json
 
 
 app = FastAPI()
-redis_client = redis.Redis(host="redis", port=6379, db=0)
+redis_client = redis.Redis(host=settings.REDIS.host, port=settings.REDIS.port, db=settings.REDIS.db)
 logger = logging.getLogger(__name__)
 
 

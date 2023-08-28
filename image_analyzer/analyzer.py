@@ -13,6 +13,7 @@ import pytesseract
 from PIL import Image
 from io import BytesIO
 import hashlib
+import asyncio
 
 
 async def get_hash_of_file(file: bytes) -> str:
@@ -26,17 +27,27 @@ async def read_content(file) -> str:
     return extracted_text.replace("\n", " ")
 
 
-async def find_sensitive_data(text: str) -> list[dict[str, str] | None]:
+async def find_sensitive_data(text: str) -> list[dict[str, str]]:
+    tasks = [
+        find_phone_number(text),
+        find_id_number(text),
+        find_cc_number(text),
+        find_plate(text),
+        find_date(text),
+        find_email(text),
+        find_domain(text),
+        find_url(text),
+        find_hash(text),
+        find_combo_list(text),
+    ]
+
     findings = []
-    findings.extend(await find_phone_number(text))
-    findings.extend(await find_id_number(text))
-    findings.extend(await find_cc_number(text))
-    findings.extend(await find_plate(text))
-    findings.extend(await find_date(text))
-    findings.extend(await find_email(text))
-    findings.extend(await find_domain(text))
-    findings.extend(await find_url(text))
-    findings.extend(await find_hash(text))
-    findings.extend(await find_combo_list(text))
+    results = await asyncio.gather(*tasks)
+
+    for result in results:
+        if result is not None:
+            findings.extend(result)
 
     return findings
+
+
