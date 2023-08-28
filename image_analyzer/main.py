@@ -2,13 +2,16 @@ import redis.asyncio as redis
 from fastapi import FastAPI, UploadFile, Request, status, HTTPException
 from fastapi.responses import JSONResponse
 from image_analyzer.analyzer import read_content, find_sensitive_data, get_hash_of_file
-from image_analyzer.custom_expections import WrongFileFormatException
+from image_analyzer.expections import WrongFileFormatException
 from config import settings
+from typing import Union
+import logging
 import json
 
 
 app = FastAPI()
 redis_client = redis.Redis(host="redis", port=6379, db=0)
+logger = logging.getLogger(__name__)
 
 
 @app.exception_handler(WrongFileFormatException)
@@ -20,7 +23,8 @@ async def unicorn_exception_handler(_request: Request, _exc: WrongFileFormatExce
 
 
 @app.post("/analyze/")
-async def analyze_image(file: UploadFile):
+async def analyze_image(file: UploadFile) -> dict[str, Union[str, list[dict[str, str]]]]:
+    logger.info("Analyzing image: %s", file.filename)
     # Check if the uploaded file is an image
     if file.content_type not in settings.IMAGE_TYPES.image_types:
         raise WrongFileFormatException(file.filename)
@@ -31,6 +35,7 @@ async def analyze_image(file: UploadFile):
 
     # Check if the result is cached in Redis
     if cached_result := await redis_client.get(image_hash):
+        logger.info("Image analysis completed. Returning cached result.")
         return json.loads(cached_result)
 
     # Read the content from the file object and if the content is empty, return a 204 No Content response
@@ -52,4 +57,5 @@ async def analyze_image(file: UploadFile):
 
     # Cache the result in Redis
     await redis_client.set(image_hash, json.dumps(result))
+    logger.info("Image analysis complete.")
     return result
