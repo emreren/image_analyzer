@@ -1,5 +1,4 @@
-## İmage Analyzer
-
+## Görüntü Analiz Uygulaması
 Image Analyzer, yüklenen görüntü dosyalarındaki hassas verileri (örneğin telefon numaraları, kredi kartı numaraları, tarihler vb.) tespit eden bir FastAPI uygulamasıdır.
 
 ### Başlangıç
